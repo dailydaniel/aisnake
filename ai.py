@@ -26,8 +26,8 @@ from random import uniform
 settings = {}
 
 # EVOLUTION SETTINGS 
-settings['pop_size'] = 10        # number of organisms       50
-settings['gens'] = 2            # number of generations     50
+settings['pop_size'] = 50        # number of organisms       50
+settings['gens'] = 50            # number of generations     50
 settings['elitism'] = 0.20      # elitism (selection bias)
 settings['mutate'] = 0.10       # mutation rate
 
@@ -38,7 +38,7 @@ settings['mutate'] = 0.10       # mutation rate
 # settings['y_max'] =  2.0        # arena northern border
 
 # ORGANISM NEURAL NET SETTINGS
-settings['inodes'] = 4          # number of input nodes
+settings['inodes'] = 4          # number of input nodes 
 settings['hnodes'] = 5          # number of hidden nodes
 settings['onodes'] = 1          # number of output nodes
 
@@ -124,17 +124,14 @@ def evolve(settings, organisms_old, gen):
 
 class organism():
     def __init__(self, settings, wih=None, who=None, name=None):
-        
-        # self.x = uniform(settings['x_min'], settings['x_max'])  # position (x)
-        # self.y = uniform(settings['y_min'], settings['y_max'])  # position (y)
 
-        self.r = 0                 # orientation   [0, 360]
+        self.r = 0          # orientation   [0, 360]
 
-        self.d_food = 100   # distance to nearest food
         self.r_food = 0     # orientation to nearest food
         self.r_back = 1.0   # orientation to back
         self.ifback = 0     # 0 or 1 if back on the way to food
         self.fitness = 0    # fitness (food count)
+        self.h_wall = 1     # normalized distance to wall by orintation
 
         self.wih = wih
         self.who = who
@@ -147,7 +144,7 @@ class organism():
 
         # SIMPLE MLP
         af = lambda x: np.tanh(x)               # activation function
-        h1 = af(np.dot(self.wih, [self.r_food, self.r, self.r_back, self.ifback]))  # hidden layer
+        h1 = af(np.dot(self.wih, [self.r_food, self.r_back, self.ifback, self.h_wall]))  # hidden layer
         out = af(np.dot(self.who, h1))          # output layer
 
         # UPDATE dv AND dr WITH MLP RESPONSE

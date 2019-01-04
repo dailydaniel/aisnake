@@ -29,6 +29,7 @@ from random import uniform
 from ai import settings as settingsAI
 from ai import dist, evolve, organism
  
+import pickle
 
 # Globals
 settings = {}
@@ -121,6 +122,21 @@ def exvec(r):
     else:
         return "Left"
 
+def h(r, head_coords, settings):
+    h_c = centr(head_coords)
+    real_r = exvec(r)
+
+    if real_r == "Right":
+        h = (settings['WIDTH'] - h_c[0]) / settings['WIDTH']
+    elif real_r == "Up":
+        h = h_c[1] / settings['HEIGHT']
+    elif real_r == "Down":
+        h = (settings['HEIGHT'] - h_c[1]) / settings['HEIGHT']
+    else: # "Left"
+        h = h_c[0] / settings['WIDTH']
+    
+    return h
+
 
 def main():
     play(settings)
@@ -133,15 +149,21 @@ def play(settings):
         back_coords = settings['c'].coords(settings['s'].segments[0].instance)
         block_coords = settings['c'].coords(settings['BLOCK'])
         r, r_food, r_back, ifback = dirs(settings, head_coords, back_coords, block_coords)
+        h_wall = h(r, head_coords, settings)
+
         x1, y1, x2, y2 = head_coords
 
         settings['CURRENT_ORG'].r_food = r_food
         settings['CURRENT_ORG'].r_back = r_back
         settings['CURRENT_ORG'].ifback = ifback
+        settings['CURRENT_ORG'].h_wall = h_wall
+        
         settings['CURRENT_ORG'].think()
         settings['CURRENT_ORG'].update_r()
         r = settings['CURRENT_ORG'].r
         settings['s'].change_direction_bot(exvec(r))
+
+        settings['CURRENT_ORG'].fitness += 0.01 #
         
 
         # Check for collision with gamefield edges
@@ -172,8 +194,8 @@ def play(settings):
     else:
         time.sleep(1)
         settings['c'].delete(settings['s'])
-        # root.destroy()
-        settings['root'].quit()
+        settings['root'].destroy()
+        # settings['root'].quit()
         settings['IN_GAME'] = True
 
 
@@ -270,6 +292,9 @@ def run(settings, settingsAI):
         organisms = simulate(settings, settingsAI, organisms, gen)
         organisms, stats = evolve(settingsAI, organisms, gen)
         print('> GEN:',gen,'BEST:',stats['BEST'],'AVG:',stats['AVG'],'WORST:',stats['WORST'])
+
+    with open('org.pickle.dat', 'wb') as f:
+        pickle.dump(organisms)    
 
 
 run(settings, settingsAI)
