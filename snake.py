@@ -36,7 +36,7 @@ settings = {}
 
 settings['WIDTH'] = 800
 settings['HEIGHT'] = 600
-settings['SEG_SIZE'] = 20
+settings['SEG_SIZE'] = 100 # 20
 settings['IN_GAME'] = True
 settings['BLOCK'] = None
 settings['TIME'] = 100
@@ -157,7 +157,7 @@ def play(settings):
         settings['CURRENT_ORG'].r_back = r_back
         settings['CURRENT_ORG'].ifback = ifback
         settings['CURRENT_ORG'].h_wall = h_wall
-        
+
         settings['CURRENT_ORG'].think()
         settings['CURRENT_ORG'].update_r()
         r = settings['CURRENT_ORG'].r
