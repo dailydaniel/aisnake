@@ -26,8 +26,8 @@ from random import uniform
 settings = {}
 
 # EVOLUTION SETTINGS 
-settings['pop_size'] = 50        # number of organisms       50
-settings['gens'] = 50            # number of generations     50
+settings['pop_size'] = 500      # number of organisms       50
+settings['gens'] = 50           # number of generations     50
 settings['elitism'] = 0.20      # elitism (selection bias)
 settings['mutate'] = 0.10       # mutation rate
 

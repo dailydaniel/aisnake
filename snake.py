@@ -39,12 +39,13 @@ settings['HEIGHT'] = 600
 settings['SEG_SIZE'] = 100 # 20
 settings['IN_GAME'] = True
 settings['BLOCK'] = None
-settings['TIME'] = 100
+settings['TIME'] = 5000    # 1 100
 settings['TEXT'] = None
 settings['CURRENT_ORG'] = None
 settings['s'] = None
 settings['c'] = None
 settings['root'] = None
+settings['PRO_TEXT'] = None
 
 
 # Helper functions
@@ -152,6 +153,15 @@ def play(settings):
         h_wall = h(r, head_coords, settings)
 
         x1, y1, x2, y2 = head_coords
+
+        settings['c'].delete(settings['PRO_TEXT'])
+        settings['PRO_TEXT'] = settings['c'].create_text(settings['WIDTH']-50, 
+                                                         settings['HEIGHT']-50, 
+                                                         text="r = {0}\nr_food = {1}\nr_back = {2}\nifback = {3}\nh_wall = {4}".format(exvec(r), 
+                                                                                                                                       exvec(r_food), 
+                                                                                                                                       exvec(r_back), 
+                                                                                                                                       ifback, 
+                                                                                                                                       round(h_wall, 3)))
 
         settings['CURRENT_ORG'].r_food = r_food
         settings['CURRENT_ORG'].r_back = r_back
